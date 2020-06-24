@@ -34,6 +34,21 @@ make BATTERY=BATTERY_NAME_IN_SYSFS
 
 You can look up the name in `/sys/class/power_supply`.
 
+### Running
+
+Once you've got your hands on binary, you can run it:
+
+```bash
+bartitle # Or ./dist/bin/bartitle if you didn't copy it over
+```
+
+This will run it without disowning. If you want to disown it though, you'd do it
+like this:
+
+```bash
+bartitle -d
+```
+
 ## Why is it written so poorly?
 
 IDK, I don't even know enough C to write it in a "proper" manner, so I just used
