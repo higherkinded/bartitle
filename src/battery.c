@@ -1,4 +1,5 @@
 #include "battery.h"
+#include <stdio.h>
 
 #define freadguard(fp, filepath) \
 	guard (fp, fopen(filepath, "r")) { \
@@ -13,11 +14,6 @@ static uint tick = 0;
 static FILE *max_fp;
 static FILE *cur_fp;
 static FILE *stat_fp;
-
-void discard(FILE *fp) {
-	static char _c = 1;
-	while ((_c = fgetc(fp)) != EOF) {}
-}
 
 void init_battery_state() {
 	FILE *type_fp;
@@ -89,7 +85,7 @@ char *format_status() {
 
 	rewind(stat_fp);
 	(void) fscanf(stat_fp, "%4s", status);
-	discard(stat_fp);
+	fflush(stat_fp);
 
 	// If "Full" or "Charging", it must be plugged in.
 	if (!strncmp(_BATTERY_CHARGING, status, 4)) return _BAT_ST_CHARGING;
@@ -112,11 +108,11 @@ char *format_battery() {
 	if (!tick) {
 		rewind(max_fp);
 		if (!fscanf(max_fp, "%zu", &max)) unset(battery_flags, KEEP_POLLING);
-		discard(max_fp);
+		fflush(max_fp);
 
 		rewind(cur_fp);
 		if (!fscanf(cur_fp, "%zu", &cur)) unset(battery_flags, KEEP_POLLING);
-		discard(max_fp);
+		fflush(max_fp);
 
 		ifunset (battery_flags, KEEP_POLLING) return _BAT_POLL_ERR;
 
