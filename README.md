@@ -32,13 +32,13 @@ just an optional battery support, which you can enable if you build with:
 make BATTERY=BATTERY_NAME_IN_SYSFS
 ```
 
+You can look up the name in `/sys/class/power_supply`.
+
 Other compile-time options:
 
 - `BATTERY_POLL_TICK` - defines how frequent the battery check is. By default it
     is set to 5, which makes the battery routine run every 5 ticks where one
     tick is 0.25s by default.
-
-You can look up the name in `/sys/class/power_supply`.
 
 ### Running
 
