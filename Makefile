@@ -25,6 +25,9 @@ ifneq ($(BATTERY),)
 	CFLAGS += -DBATTERY=\"$(BATTERY)\"
 	SRC += $(SRCDIR)/battery.c
 endif
+ifneq ($(BATTERY_POLL_TICK),)
+	CFLAGS += -D_BATTERY_POLL_TICK=$(BATTERY_POLL_TICK)
+endif
 
 OBJ := $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRC))
 

@@ -45,7 +45,10 @@
 #define _BAT_FULL_THRESHOLD   95
 
 // How much cycles must pass between battery checks
-#define _TICK_COUNT 5
+#ifndef _BATTERY_POLL_TICK
+#define _BATTERY_POLL_TICK 5
+#endif /* _BATTERY_POLL_TICK */
+#define _TICK_COUNT _BATTERY_POLL_TICK
 
 void init_battery_state();
 void release_battery_resources();
