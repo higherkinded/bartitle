@@ -95,6 +95,11 @@ char *format_status() {
 	return _BAT_ST_DISCHARGING;
 }
 
+#define rescan_uint(fp, dest, failexpr) \
+	rewind(fp); \
+	if (!fscanf(fp, "%zu", &dest)) failexpr; \
+	fflush(fp);
+
 char *format_battery() {
 	static char result[100] = "";
 	ulong max;
@@ -106,13 +111,8 @@ char *format_battery() {
 
 	// Update when main loop makes tick hit zero
 	if (!tick) {
-		rewind(max_fp);
-		if (!fscanf(max_fp, "%zu", &max)) unset(battery_flags, KEEP_POLLING);
-		fflush(max_fp);
-
-		rewind(cur_fp);
-		if (!fscanf(cur_fp, "%zu", &cur)) unset(battery_flags, KEEP_POLLING);
-		fflush(max_fp);
+		rescan_uint(max_fp, max, unset(battery_flags, KEEP_POLLING));
+		rescan_uint(cur_fp, cur, unset(battery_flags, KEEP_POLLING));
 
 		ifunset (battery_flags, KEEP_POLLING) return _BAT_POLL_ERR;
 
